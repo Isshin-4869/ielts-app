@@ -35,7 +35,7 @@ export type Params = {
 export const defaultParams: Params = {
   dayStartHour: 4,
   sortInstantMs: 3000,
-  sortRevealMs: 2500,
+  sortRevealMs: 5000,
   spotCheckRate: 0.1,
   spotCheckMinAccuracy: 0.8,
   blockSize: 100,
