@@ -39,5 +39,8 @@
 
 - Python の環境（初回だけ。システムの Python 3.9 で動く）：`python3 -m venv .venv && .venv/bin/pip install -r requirements.txt`
 - 変換：`.venv/bin/python -m scripts.convert`（入力の既定は `data/raw/実践IELTS英単語3500_一覧.xlsx`、出力は `data/out/`。エラーがあれば終了コード1で items.json は出さない）
-- テスト：`.venv/bin/pytest` / `npm test`
-- 開発サーバー：`npm run dev`
+- テスト：`.venv/bin/pytest`（変換）／ `cd app && npm test`（アプリ）
+- 型チェック：`cd app && npm run typecheck`
+- 開発サーバー：`cd app && npm run dev` → http://localhost:5173/ielts-app/（設定画面に、data/out/items.json を読み込む開発用ボタンが出る）
+- ビルド：`cd app && npm run build`（main に push すると GitHub Actions がテスト・ビルドして GitHub Pages に公開する）
+- アイコンの作り直し：`cd app && npm run icons`
