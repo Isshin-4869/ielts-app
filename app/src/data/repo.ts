@@ -102,6 +102,30 @@ export class Repo {
     return progress;
   }
 
+  /**
+   * 進捗をリセットして最初からやり直す。ログは消さず、まだ有効なログすべてに
+   * undone（と meta.resetAt）を付けてから進捗を作り直す。出題順のシードも作り直す。
+   * 戻り値は取り消したログの件数。
+   */
+  async resetProgress(): Promise<number> {
+    const at = this.clock.now();
+    let count = 0;
+    await this.db.transaction('rw', [this.db.items, this.db.progress, this.db.logs, this.db.meta], async () => {
+      const active = (await this.db.logs.toArray()).filter((l) => !l.undone);
+      count = active.length;
+      await this.db.logs.bulkPut(active.map((l) => ({ ...l, undone: true, meta: { ...l.meta, resetAt: at } })));
+      await this.db.meta.put({ key: META_SEED, value: ulid(at) });
+      const ids = (await this.db.items.toCollection().primaryKeys()) as string[];
+      await this.rebuildInTx(ids);
+    });
+    return count;
+  }
+
+  /** 有効な（取り消されていない）回答の件数 */
+  async activeLogCount(): Promise<number> {
+    return this.db.logs.filter((l) => !l.undone).count();
+  }
+
   /** 全ログから進捗を作り直す。 */
   async rebuildProgress(): Promise<void> {
     await this.db.transaction('rw', [this.db.items, this.db.progress, this.db.logs], async () => {

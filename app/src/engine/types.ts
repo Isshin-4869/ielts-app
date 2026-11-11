@@ -40,6 +40,8 @@ export type ReviewLog = {
     hintUsed?: boolean;
     typo?: boolean;
     formatPromoted?: boolean;
+    /** 「進捗をリセット」で取り消したときの時刻 */
+    resetAt?: number;
   };
 };
 

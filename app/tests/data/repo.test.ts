@@ -76,6 +76,33 @@ describe('Repo', () => {
     expect((await db.logs.get(log.id))?.undone).toBe(true);
   });
 
+  it('リセットすると全項目が new に戻り、ログは undone で残り、出題順も変わる', async () => {
+    const seed = await repo.installSeed();
+    await repo.recordSort('t-0000', 'known', 900, false);
+    await repo.recordSort('t-0001', 'unknown', 900, false);
+    const { log: undoneBefore } = await repo.recordSort('t-0002', 'unknown', 900, false);
+    await repo.undo(undoneBefore.id);
+
+    expect(await repo.activeLogCount()).toBe(2);
+    expect(await repo.resetProgress()).toBe(2);
+    expect(await repo.activeLogCount()).toBe(0);
+
+    const logs = await db.logs.toArray();
+    expect(logs).toHaveLength(3); // 消さない
+    expect(logs.every((l) => l.undone)).toBe(true);
+    expect(logs.filter((l) => l.meta?.resetAt !== undefined)).toHaveLength(2);
+
+    const { items, progress } = await repo.loadAll();
+    expect([...progress.values()].every((p) => p.state === 'new')).toBe(true);
+    const newSeed = await repo.installSeed();
+    expect(newSeed).not.toBe(seed);
+    expect(currentSortBlock(items, progress, newSeed)?.block).toBe(0);
+
+    // リセット後も普通に回答できる
+    await repo.recordSort('t-0000', 'unknown', 900, false);
+    expect((await db.progress.get('t-0000'))?.sortClass).toBe('C');
+  });
+
   it('単語データを入れ直してもログと進捗は残る', async () => {
     await repo.recordSort('t-0002', 'unknown', 900, false);
     await repo.importItems(fakeItems(150));

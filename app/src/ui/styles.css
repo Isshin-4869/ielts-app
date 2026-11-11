@@ -179,6 +179,25 @@ button {
   opacity: 0.5;
 }
 
+/* 取り返しのつかない操作（Error 色） */
+.btn-danger {
+  color: var(--da-error);
+  border-color: var(--da-error);
+}
+
+.btn-danger-solid {
+  background: var(--da-error);
+  border-color: var(--da-error);
+  color: var(--da-text-inverse);
+}
+
+.confirm-box {
+  background: var(--da-red-50);
+  border-radius: var(--da-radius);
+  padding: var(--da-padding);
+  gap: 12px;
+}
+
 .file-btn input {
   display: none;
 }

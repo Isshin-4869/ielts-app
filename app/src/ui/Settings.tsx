@@ -14,6 +14,7 @@ export function Settings({ data, onChanged, notify }: Props) {
   const [importedAt, setImportedAt] = useState<number | undefined>();
   const [persisted, setPersisted] = useState<boolean | null>(null);
   const [busy, setBusy] = useState(false);
+  const [confirmReset, setConfirmReset] = useState(false);
 
   useEffect(() => {
     void repo.counts().then((c) => setLogCount(c.logs));
@@ -46,6 +47,22 @@ export function Settings({ data, onChanged, notify }: Props) {
       setBusy(false);
     }
   }
+
+  async function reset() {
+    setBusy(true);
+    try {
+      await repo.resetProgress();
+      setConfirmReset(false);
+      await onChanged();
+      notify('進捗をリセットしました。最初から仕分けできます');
+    } catch (e) {
+      notify(`リセットできませんでした：${String(e)}`);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const sortedCount = [...data.progress.values()].filter((p) => p.state !== 'new').length;
 
   return (
     <div className="screen">
@@ -86,6 +103,33 @@ export function Settings({ data, onChanged, notify }: Props) {
           <p className="muted small" style={{ margin: 0 }}>
             データの保護：{persisted === null ? '確認中' : persisted ? '有効' : '未許可（ホーム画面に追加すると有効になりやすい）'}
           </p>
+        </div>
+
+        <div className="card stack">
+          <div>
+            <b>最初からやり直す</b>
+            <div className="muted small">仕分け済み {sortedCount.toLocaleString()} 語</div>
+          </div>
+          {!confirmReset ? (
+            <button className="btn btn-danger" disabled={busy || sortedCount === 0} onClick={() => setConfirmReset(true)}>
+              進捗をリセットする
+            </button>
+          ) : (
+            <div className="stack confirm-box" role="alertdialog" aria-label="進捗のリセットの確認">
+              <p style={{ margin: 0 }}>
+                全 {data.items.length.toLocaleString()} 語を「未着手」に戻し、仕分けを最初からやり直します。出題の順番も変わります。
+              </p>
+              <p className="muted small" style={{ margin: 0 }}>
+                これまでの回答は「取り消し」として記録に残りますが、アプリの画面からは元に戻せません。心配なら先にバックアップを書き出してください。
+              </p>
+              <button className="btn btn-danger-solid" disabled={busy} onClick={() => void reset()}>
+                リセットする
+              </button>
+              <button className="btn" disabled={busy} onClick={() => setConfirmReset(false)}>
+                やめる
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
