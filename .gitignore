@@ -1,0 +1,16 @@
+# 元データと変換結果（市販の単語帳由来なのでコミットしない）
+data/raw/
+data/out/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Node
+node_modules/
+dist/
+
+# macOS
+.DS_Store

@@ -1,0 +1,5 @@
+# データ変換（scripts/convert）用。Python 3.9 以上
+pandas==2.3.3
+openpyxl==3.1.5
+lemminflect==0.2.3
+pytest==8.4.2
