@@ -252,8 +252,8 @@ export function SortSession({ data, onExit }: { data: AppData; onExit: () => voi
         )}
 
         {phase.kind === 'allDone' && (
-          <div className="card done-box stack">
-            <div className="big">仕分けが終わりました</div>
+          <div className="done-box stack">
+            <div className="done-title">仕分けが終わりました</div>
             <button className="btn btn-primary" onClick={onExit}>
               ホームに戻る
             </button>
@@ -269,20 +269,23 @@ export function SortSession({ data, onExit }: { data: AppData; onExit: () => voi
 function BlockDone(props: { block: number; counts: Counts; onNext: () => void; onExit: () => void }) {
   const { block, counts, onNext, onExit } = props;
   return (
-    <div className="card done-box stack">
-      <div className="big">ブロック {block + 1} 完了</div>
-      <div className="stat-row">
-        <div className="stat">
-          <span className="muted small">知ってる</span>
-          <b>{counts.A}</b>
+    <div className="done-box stack">
+      <div>
+        <div className="done-title">ブロック {block + 1} 完了</div>
+        <div className="muted small">このブロックの仕分け結果（{counts.A + counts.B + counts.C} 件）</div>
+      </div>
+      <div className="kpi-row">
+        <div className="card kpi">
+          <div className="kpi-label">知ってる</div>
+          <div className="kpi-value">{counts.A}</div>
         </div>
-        <div className="stat">
-          <span className="muted small">あやふや</span>
-          <b>{counts.B}</b>
+        <div className="card kpi">
+          <div className="kpi-label">あやふや</div>
+          <div className="kpi-value">{counts.B}</div>
         </div>
-        <div className="stat">
-          <span className="muted small">知らない</span>
-          <b>{counts.C}</b>
+        <div className="card kpi">
+          <div className="kpi-label">知らない</div>
+          <div className="kpi-value">{counts.C}</div>
         </div>
       </div>
       <button className="btn btn-primary" onClick={onNext}>
