@@ -198,6 +198,114 @@ button {
   gap: 12px;
 }
 
+/* ---- 検索 ---- */
+
+.search-input {
+  width: 100%;
+  padding: 12px;
+  font: inherit;
+  font-size: var(--da-fs-body);
+  color: var(--da-text);
+  background: var(--da-bg-control);
+  border: 1px solid var(--da-outline);
+  border-radius: var(--da-radius);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.result-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.result-list li {
+  border-top: 1px solid var(--da-gridline);
+}
+
+.result-list li:last-child {
+  border-bottom: 1px solid var(--da-gridline);
+}
+
+.result-list button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 4px;
+  text-align: left;
+}
+
+.result-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.result-title {
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.result-sub {
+  font-size: var(--da-fs-legend);
+  color: var(--da-label);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.result-status {
+  flex-shrink: 0;
+  font-size: var(--da-fs-legend);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badge-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+}
+
+.result-status .badge-swatch {
+  margin-right: 0;
+}
+
+.back-btn {
+  color: var(--da-link);
+  padding: 8px 0;
+  font-size: var(--da-fs-body);
+}
+
+.meta-list {
+  margin: var(--da-gutter) 0 0;
+  font-size: var(--da-fs-legend);
+}
+
+.meta-list > div {
+  display: flex;
+  gap: 12px;
+  padding: 6px 0;
+  border-top: 1px solid var(--da-gridline);
+}
+
+.meta-list dt {
+  width: 5em;
+  color: var(--da-label);
+}
+
+.meta-list dd {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
 .file-btn input {
   display: none;
 }

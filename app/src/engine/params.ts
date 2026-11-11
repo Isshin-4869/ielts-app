@@ -30,6 +30,8 @@ export type Params = {
   cycleProbCorrect: number;
   cycleProbWrong: number;
   fallbackSecPerItem: { sort: number; cycle: number; choice4: number; flash: number; input: number };
+  /** 検索結果に一度に出す件数 */
+  searchResultLimit: number;
 };
 
 export const defaultParams: Params = {
@@ -62,4 +64,5 @@ export const defaultParams: Params = {
   cycleProbCorrect: 0.6,
   cycleProbWrong: 0.2,
   fallbackSecPerItem: { sort: 3, cycle: 5, choice4: 6, flash: 7, input: 12 },
+  searchResultLimit: 50,
 };

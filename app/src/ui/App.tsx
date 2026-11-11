@@ -4,6 +4,7 @@ import { db } from '../data/db';
 import { Repo } from '../data/repo';
 import type { Item } from '../data/types';
 import { Home } from './Home';
+import { Search } from './Search';
 import { Settings } from './Settings';
 import { SortSession } from './SortSession';
 
@@ -16,12 +17,13 @@ export type AppData = {
   seed: string;
 };
 
-type View = 'home' | 'settings' | 'sort';
+type View = 'home' | 'search' | 'settings' | 'sort';
 
 export function App() {
   const [data, setData] = useState<AppData | null>(null);
   const [view, setView] = useState<View>('home');
   const [toast, setToast] = useState<string | null>(null);
+  const [query, setQuery] = useState('');
   const [loadError, setLoadError] = useState<string | null>(null);
 
   const reload = useCallback(async () => {
@@ -68,14 +70,17 @@ export function App() {
 
   return (
     <>
-      {view === 'home' ? (
+      {view === 'home' && (
         <Home data={data} onStart={() => setView('sort')} onImported={reload} notify={setToast} />
-      ) : (
-        <Settings data={data} onChanged={reload} notify={setToast} />
       )}
+      {view === 'search' && <Search data={data} query={query} onQuery={setQuery} />}
+      {view === 'settings' && <Settings data={data} onChanged={reload} notify={setToast} />}
       <nav className="tabbar">
         <button aria-current={view === 'home' ? 'page' : undefined} onClick={() => setView('home')}>
           ホーム
+        </button>
+        <button aria-current={view === 'search' ? 'page' : undefined} onClick={() => setView('search')}>
+          検索
         </button>
         <button aria-current={view === 'settings' ? 'page' : undefined} onClick={() => setView('settings')}>
           設定
